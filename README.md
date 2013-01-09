@@ -1,11 +1,10 @@
-oscommerce-mvs
-==============
+Free eCommerce DropShipping Software base in osCommerce 2.3.3 MVS
 
 http://www.osCMVS.com
 
-osCommerce Dropshipping/MVS
+=============================================================================
 
-Free eCommerce DropShipping Software base in osCommerce 2.3.3 MVS
+
 This package changes the way osCommerce 2.3 handles shipping. You can now set the shipping
 parameters for each product individually. All of the following (and more) are possible:
 

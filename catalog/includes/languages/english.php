@@ -238,7 +238,8 @@ define('TEXT_NO_NEW_PRODUCTS', 'There are currently no products.');
 define('TEXT_UNKNOWN_TAX_RATE', 'Unknown tax rate');
 
 define('TEXT_REQUIRED', '<span class="errorText">Required</span>');
-
+//MVS
+define('MULTIPLE_SHIP_METHODS_TITLE', 'Combined Shipping');
 define('ERROR_TEP_MAIL', '<font face="Verdana, Arial" size="2" color="#ff0000"><strong><small>TEP ERROR:</small> Cannot send the email through the specified SMTP server. Please check your php.ini setting and correct the SMTP server if necessary.</strong></font>');
 
 define('TEXT_CCVAL_ERROR_INVALID_DATE', 'The expiry date entered for the credit card is invalid. Please check the date and try again.');

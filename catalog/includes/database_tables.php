@@ -9,7 +9,14 @@
 
   Released under the GNU General Public License
 */
-
+//MVS Start
+  define('TABLE_ORDERS_SHIPPING','orders_shipping');
+  define('TABLE_VENDORS', 'vendors');
+  define('TABLE_VENDOR_CONFIGURATION', 'vendor_configuration');
+  define('TABLE_VENDOR_CONFIGURATION_GROUP','vendor_configuration_group');
+//MVS End
+//UPSXML dimensional support (Added for MVS)
+  define('TABLE_PACKAGING', 'packaging');
 // define the database table names used in the project
   define('TABLE_ACTION_RECORDER', 'action_recorder');
   define('TABLE_ADDRESS_BOOK', 'address_book');

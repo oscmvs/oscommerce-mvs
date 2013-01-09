@@ -34,6 +34,13 @@
 // fix jQuery 1.8.0 and jQuery UI 1.8.22 bug with dialog buttons; http://bugs.jqueryui.com/ticket/8484
 if ( $.attrFn ) { $.attrFn.text = true; }
 </script>
+<?php // MVS Shipping Estimator Start ?>
+<script language="javascript" type="text/javascript"><!--
+function estimatorpopupWindow(URL) {
+  window.open(URL,'productsshippingestimator','toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600')
+}
+//--></script>
+<?php // MVS Shipping Estimator End ?>
 
 <?php
   if (tep_not_null(JQUERY_DATEPICKER_I18N_CODE)) {

@@ -109,7 +109,14 @@
     </table>
 
     <p align="right"><strong><?php echo SUB_TITLE_SUB_TOTAL; ?> <?php echo $currencies->format($cart->show_total()); ?></strong></p>
-
+<?php
+// MVS Shipping Estimator start
+    if (SHIP_ESTIMATOR_BUTTON_SHOPPING_CART == 'true') {
+      echo '                <td class="main" align=center><a href="javascript:estimatorpopupWindow(\'' .  tep_href_link (FILENAME_SHIP_ESTIMATOR, 'pid=' . (int) $_GET['products_id'], 'SSL') . '\')">' . tep_image_button ('button_estimate_shipping.gif', IMAGE_BUTTON_SHIP_ESTIMATOR) . '</a></td>';
+    }
+// MVS Shipping Estimator end
+?>
+      
 <?php
     if ($any_out_of_stock == 1) {
       if (STOCK_ALLOW_CHECKOUT == 'true') {

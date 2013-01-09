@@ -59,6 +59,7 @@
   if (is_array($payment_modules->modules)) {
     $payment_modules->pre_confirmation_check();
   }
+// load the selected shipping module
 
 // load the selected shipping module
   require(DIR_WS_CLASSES . 'shipping.php');

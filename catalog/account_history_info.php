@@ -64,6 +64,23 @@
             <td><?php echo tep_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br />'); ?></td>
           </tr>
 <?php
+
+//MVS start
+    $orders_shipping_id = '';
+    $check_new_vendor_data_query = tep_db_query ("select orders_shipping_id, 
+                                                         orders_id, 
+                                                         vendors_id, 
+                                                         vendors_name, 
+                                                         shipping_module, 
+                                                         shipping_method, 
+                                                         shipping_cost 
+                                                  from " . TABLE_ORDERS_SHIPPING . " 
+                                                  where orders_id = '" . (int) $order_id . "'
+                                                ");
+    while ($checked_data = tep_db_fetch_array ($check_new_vendor_data_query)) {
+      $orders_shipping_id = $checked_data['orders_shipping_id'];
+    }
+//MVS end
     if (tep_not_null($order->info['shipping_method'])) {
 ?>
           <tr>
@@ -81,6 +98,13 @@
 ?>
         <td width="<?php echo (($order->delivery != false) ? '70%' : '100%'); ?>" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
+//MVS start
+      if (tep_not_null ($orders_shipping_id)) {   
+        require_once (DIR_WS_INCLUDES . 'vendor_order_data.php');
+        require_once (DIR_WS_INCLUDES . 'vendor_order_info.php');
+      } else {
+//MVS end 
+?><?php
   if (sizeof($order->info['tax_groups']) > 1) {
 ?>
           <tr>
@@ -117,6 +141,8 @@
 
     echo '            <td align="right" valign="top">' . $currencies->format(tep_add_tax($order->products[$i]['final_price'], $order->products[$i]['tax']) * $order->products[$i]['qty'], true, $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
          '          </tr>' . "\n";
+  }
+  //MVS
   }
 ?>
         </table></td>

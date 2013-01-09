@@ -1,29 +1,11 @@
-a:12:{s:8:"encoding";s:5:"UTF-8";s:5:"title";s:18:"osCommerce Add-Ons";s:4:"link";s:25:"http://www.oscommerce.com";s:11:"description";s:29:"osCommerce, Sell With Emotion";s:8:"language";s:2:"en";s:9:"copyright";s:29:"Copyright (c) 2012 osCommerce";s:14:"managingEditor";s:19:"hpdl@oscommerce.com";s:11:"image_title";s:10:"osCommerce";s:9:"image_url";s:53:"http://www.oscommerce.com/images/oscommerce_88x31.gif";s:10:"image_link";s:25:"http://www.oscommerce.com";s:5:"items";a:5:{i:0;a:4:{s:5:"title";s:19:"Attribute Sets Plus";s:4:"link";s:38:"http://addons.oscommerce.com/info/3610";s:11:"description";s:817:"to make version 1.3.3 works with Oscommerce version 2.3.1 <br />
-in the original instructions - step 3<br />
-in file /catalog/includes/boxs/catalog.php<br />
-instead of the originals instructions do this:<br />
+a:12:{s:8:"encoding";s:5:"UTF-8";s:5:"title";s:18:"osCommerce Add-Ons";s:4:"link";s:25:"http://www.oscommerce.com";s:11:"description";s:29:"osCommerce, Sell With Emotion";s:8:"language";s:2:"en";s:9:"copyright";s:29:"Copyright (c) 2012 osCommerce";s:14:"managingEditor";s:19:"hpdl@oscommerce.com";s:11:"image_title";s:10:"osCommerce";s:9:"image_url";s:53:"http://www.oscommerce.com/images/oscommerce_88x31.gif";s:10:"image_link";s:25:"http://www.oscommerce.com";s:5:"items";a:5:{i:0;a:4:{s:5:"title";s:35:"MailBeez Module: Birthday Greetings";s:4:"link";s:38:"http://addons.oscommerce.com/info/7443";s:11:"description";s:44:"new query to catch birthdays around new year";s:7:"pubDate";s:31:"Wed, 02 Jan 2013 16:04:19 +0100";}i:1;a:4:{s:5:"title";s:28:"List -OR- Grid View - Simple";s:4:"link";s:38:"http://addons.oscommerce.com/info/8670";s:11:"description";s:114:"This mod will allow you to define if you want a list or grid style product listing style.  Very simple to install!";s:7:"pubDate";s:31:"Tue, 01 Jan 2013 17:51:17 +0100";}i:2;a:4:{s:5:"title";s:29:"Email For Quote for OSCv2.3.1";s:4:"link";s:38:"http://addons.oscommerce.com/info/8522";s:11:"description";s:217:"Full package release combining all bug fixes and updates to date.<br />
 <br />
-###after this line### -<br />
+NOTE: This release just combines all files to date into a full release.  There is nothing new added from what is shown below.<br />
+<br />";s:7:"pubDate";s:31:"Tue, 01 Jan 2013 11:26:02 +0100";}i:3;a:4:{s:5:"title";s:14:"HTML Mail v1.0";s:4:"link";s:38:"http://addons.oscommerce.com/info/8669";s:11:"description";s:51:"Forgot links to the support forum lol Full package!";s:7:"pubDate";s:31:"Mon, 31 Dec 2012 20:56:31 +0100";}i:4;a:4:{s:5:"title";s:24:"Database Optimizer V 1.0";s:4:"link";s:38:"http://addons.oscommerce.com/info/7819";s:11:"description";s:467:"- Added code to force an update if ran locally<br />
+- Added an includes directive to load the database tables names since they were not always being recognized<br />
+- Added an option in the settings to set the email addresses to something other than the shop owner<br />
+- Corrected mistake in database_optimizer_common.php that was using the wrong config setting for orders (reported by member mention) <br />
 <br />
-      array(<br />
-        'code' =&gt; FILENAME_PRODUCTS_ATTRIBUTES,<br />
-        'title' =&gt; BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES,<br />
-        'link' =&gt; tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES)<br />
-      ), <br />
 <br />
-###Add this lines### -<br />
-<br />
-  array(<br />
-        'code' =&gt; FILENAME_PRODUCTS_ATTRIBUTES_SETS,<br />
-        'title' =&gt; BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES_SETS,<br />
-        'link' =&gt; tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES_SETS)<br />
-      ),<br />
-<br />
-#I hope that will helps :)<br />";s:7:"pubDate";s:31:"Sun, 23 Dec 2012 14:00:56 +0100";}i:1;a:4:{s:5:"title";s:42:"Pixmania.com automatically products update";s:4:"link";s:38:"http://addons.oscommerce.com/info/8661";s:11:"description";s:337:"Module update products automatically from pixmania.com into your Oscommerce store. Products will be added, updated or deleted after parse of pixmania.com csv file. Product will be deleted if it is not in csv file. Pixmania products is marked to separate them from your own products. Images for pixmania products shows from pixmania site.";s:7:"pubDate";s:31:"Sat, 22 Dec 2012 22:20:51 +0100";}i:2;a:4:{s:5:"title";s:14:"mapping_import";s:4:"link";s:38:"http://addons.oscommerce.com/info/8660";s:11:"description";s:366:"This goal of this add is to import data inside oscommerce database by a mapping.<br />
-<br />
-You can import Prestashop data, magento or whatever in catagories, categories description, product, product description, products to categories, manufacturers, manufacturers_info<br />
-<br />
-if you want to migrate prestashop to oscommerce, this add on can help you.<br />";s:7:"pubDate";s:31:"Fri, 21 Dec 2012 19:20:34 +0100";}i:3;a:4:{s:5:"title";s:30:"Italian language for OSC 2.3.3";s:4:"link";s:38:"http://addons.oscommerce.com/info/8659";s:11:"description";s:200:"Modified version of the &quot;Italian language full ver 1.0&quot; by jankopirnat (http://addons.oscommerce.com/info/8122).<br />
-I've added the few files that were changed from version 2.3.1 to 2.3.3.";s:7:"pubDate";s:31:"Fri, 21 Dec 2012 17:13:42 +0100";}i:4;a:4:{s:5:"title";s:53:"Advanced Ajax Search for Oscommerce with Extra Fields";s:4:"link";s:38:"http://addons.oscommerce.com/info/8658";s:11:"description";s:264:"Ajax search for Oscommerce with extra fields. You can use it in any version of Oscommerce with extra fields (Milestone, Online Merchant, CREloaded, OscMAX, osc2nuke etc).<br />
-<br />
-Search developed for addon http://addons.oscommerce.com/info/2202 (2.0j version)";s:7:"pubDate";s:31:"Fri, 21 Dec 2012 13:10:41 +0100";}}s:11:"items_count";i:5;}
+This is a complete package.<br />
+<br />";s:7:"pubDate";s:31:"Mon, 31 Dec 2012 19:21:04 +0100";}}s:11:"items_count";i:5;}

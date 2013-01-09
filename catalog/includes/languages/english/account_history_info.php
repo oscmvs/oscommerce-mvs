@@ -38,4 +38,22 @@ define('TEXT_NO_COMMENTS_AVAILABLE', 'No comments available.');
 define('TABLE_HEADING_DOWNLOAD_DATE', 'Link expires: ');
 define('TABLE_HEADING_DOWNLOAD_COUNT', ' downloads remaining');
 define('HEADING_DOWNLOAD', 'Download links');
+
+
+//MVS Start - added for new order data
+define('TABLE_HEADING_PRODUCTS_VENDOR', 'Shipment');
+define('TABLE_HEADING_QUANTITY', 'Qty');
+define('TABLE_HEADING_VENDORS_SHIP', 'Shipper');
+define('TABLE_HEADING_SHIPPING_METHOD', 'Method');
+define('TABLE_HEADING_SHIPPING_COST', 'Ship Cost');
+define('TABLE_HEADING_QUANTITY', 'Qty.');
+define('TABLE_HEADING_PRODUCTS_MODEL', 'Model');
+define('TABLE_HEADING_PRODUCTS', 'Products');
+define('TABLE_HEADING_TAX', 'Tax');
+define('TABLE_HEADING_TOTAL', 'Total');
+define('TABLE_HEADING_PRICE_EXCLUDING_TAX', 'Price (ex)');
+define('TABLE_HEADING_PRICE_INCLUDING_TAX', 'Price (inc)');
+define('TABLE_HEADING_TOTAL_EXCLUDING_TAX', 'Total (ex)');
+define('TABLE_HEADING_TOTAL_INCLUDING_TAX', 'Total (inc)');
+//MVS End
 ?>

@@ -28,4 +28,8 @@ define('TABLE_HEADING_COMMENTS', 'Add Comments About Your Order');
 
 define('TITLE_CONTINUE_CHECKOUT_PROCEDURE', 'Continue Checkout Procedure');
 define('TEXT_CONTINUE_CHECKOUT_PROCEDURE', 'to select the preferred payment method.');
-?>
+
+//MVS Start
+define('TEXT_MULTIPLE_SHIPPING_METHODS', 'Some products will be shipped from different locations. Please choose a shipping method for each group of products below.');
+define('TEXT_PRODUCTS', 'Products');
+//MVS End?>

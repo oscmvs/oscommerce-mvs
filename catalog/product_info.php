@@ -22,6 +22,16 @@
   $product_check = tep_db_fetch_array($product_check_query);
 
   require(DIR_WS_INCLUDES . 'template_top.php');
+  ?>
+  <?php // MVS Shipping Estimator Start ?>
+<script language="javascript" type="text/javascript"><!--
+function estimatorpopupWindow(URL) {
+  window.open(URL,'productsshippingestimator','toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600')
+}
+//--></script>
+<?php // MVS Shipping Estimator End ?>
+  
+  <?
 
   if ($product_check['total'] < 1) {
 ?>
@@ -198,7 +208,13 @@ $("#piGal a[rel^='fancybox']").fancybox({
     <span class="buttonAction"><?php echo tep_draw_hidden_field('products_id', $product_info['products_id']) . tep_draw_button(IMAGE_BUTTON_IN_CART, 'cart', null, 'primary'); ?></span>
 
     <?php echo tep_draw_button(IMAGE_BUTTON_REVIEWS . (($reviews['count'] > 0) ? ' (' . $reviews['count'] . ')' : ''), 'comment', tep_href_link(FILENAME_PRODUCT_REVIEWS, tep_get_all_get_params())); ?>
-  </div>
+ <?php
+// MVS Shipping Estimator start
+    if (SHIP_ESTIMATOR_BUTTON_PRODUCTS_INFO == 'true') {
+      echo '                <td class="main" align=center><a href="javascript:estimatorpopupWindow(\'' .  tep_href_link (FILENAME_PRODUCTS_SHIP_ESTIMATOR, 'pid=' . (int) $_GET['products_id'], 'SSL') . '\')">' . tep_image_button ('button_estimate_shipping.gif', IMAGE_BUTTON_SHIP_ESTIMATOR) . '</a></td>';
+    }
+// MVS Shipping Estimator end
+?> </div>
 
 <?php
     if ((USE_CACHE == 'true') && empty($SID)) {

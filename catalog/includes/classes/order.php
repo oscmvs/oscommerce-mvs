@@ -222,6 +222,10 @@
                           'shipping_method' => $shipping['title'],
                           'shipping_cost' => $shipping['cost'],
                           'subtotal' => 0,
+						  //MVS Start
+                          'shipping_tax' => $shipping['shipping_tax_total'],
+                          'tax' => $shipping['shipping_tax_total'],
+//MVS End
                           'tax' => 0,
                           'tax_groups' => array(),
                           'comments' => (tep_session_is_registered('comments') && !empty($comments) ? $comments : ''));
@@ -277,6 +281,13 @@
                              'country' => array('id' => $billing_address['countries_id'], 'title' => $billing_address['countries_name'], 'iso_code_2' => $billing_address['countries_iso_code_2'], 'iso_code_3' => $billing_address['countries_iso_code_3']),
                              'country_id' => $billing_address['entry_country_id'],
                              'format_id' => $billing_address['address_format_id']);
+							 //MVS start
+      $orders_shipping_id = '';
+      $check_new_vendor_data_query = tep_db_query("select orders_shipping_id, orders_id, vendors_id, vendors_name, shipping_module, shipping_method, shipping_cost from " . TABLE_ORDERS_SHIPPING . " where orders_id = '" . (int)$order_id . "'");
+      while ($checked_data = tep_db_fetch_array($check_new_vendor_data_query)) {
+        $this->orders_shipping_id = $checked_data['orders_shipping_id'];
+      } 
+//MVS End
 
       $index = 0;
       $products = $cart->get_products();
@@ -288,6 +299,10 @@
                                         'tax_description' => tep_get_tax_description($products[$i]['tax_class_id'], $tax_address['entry_country_id'], $tax_address['entry_zone_id']),
                                         'price' => $products[$i]['price'],
                                         'final_price' => $products[$i]['price'] + $cart->attributes_price($products[$i]['id']),
+										//MVS start
+                                        'vendors_id' => $products[$i]['vendors_id'],
+                                        'vendors_name' => $products[$i]['vendors_name'],
+//MVS end
                                         'weight' => $products[$i]['weight'],
                                         'id' => $products[$i]['id']);
 
@@ -326,7 +341,9 @@
           if (isset($this->info['tax_groups']["$products_tax_description"])) {
             $this->info['tax_groups']["$products_tax_description"] += ($products_tax / 100) * $shown_price;
           } else {
-            $this->info['tax_groups']["$products_tax_description"] = ($products_tax / 100) * $shown_price;
+          //MVS Start -- add shipping tax
+            $this->info['tax_groups']["$products_tax_description"] = ($products_tax / 100) * $shown_price + $shipping['shipping_tax_total'];
+//MVS end
           }
         }
 

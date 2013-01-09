@@ -11,7 +11,8 @@
 */
 
 // start the timer for the page parse time log
-  define('PAGE_PARSE_START_TIME', microtime());
+ini_set('date.timezone', 'America/Chicago');
+define('PAGE_PARSE_START_TIME', microtime());
 
 // set the level of error reporting
   error_reporting(E_ALL & ~E_NOTICE);
@@ -69,6 +70,14 @@
   while ($configuration = tep_db_fetch_array($configuration_query)) {
     define($configuration['cfgKey'], $configuration['cfgValue']);
   }
+  
+  //MVS Start
+// Set the vendor shipping constants
+  $vendor_configuration_query = tep_db_query('select configuration_key as cfgKey, configuration_value as cfgValue from ' . TABLE_VENDOR_CONFIGURATION);
+  while ($vendor_configuration = tep_db_fetch_array($vendor_configuration_query)) {
+    define($vendor_configuration['cfgKey'], $vendor_configuration['cfgValue']);
+  }
+//MVS End
 
 // if gzip_compression is enabled, start to buffer the output
   if ( (GZIP_COMPRESSION == 'true') && ($ext_zlib_loaded = extension_loaded('zlib')) && !headers_sent() ) {

@@ -44,6 +44,14 @@
 // load selected payment module
   require(DIR_WS_CLASSES . 'payment.php');
   $payment_modules = new payment($payment);
+  
+  //MVS start
+//  if (($total_weight > 0 ) || (SELECT_VENDOR_SHIPPING == 'true') ) {
+  //  include_once (DIR_WS_CLASSES . 'vendor_shipping.php');
+  //} elseif ( ($total_weight > 0 ) || (SELECT_VENDOR_SHIPPING == 'false') ) {
+  //  include_once (DIR_WS_CLASSES . 'shipping.php');
+ // }
+//MVS End
 
 // load the selected shipping module
   require(DIR_WS_CLASSES . 'shipping.php');
@@ -138,6 +146,44 @@
                           'customer_notified' => $customer_notification,
                           'comments' => $order->info['comments']);
   tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+  
+  //MVS start
+// Insert data into new orders_shipping table
+  $shipping_array = $shipping['vendor'];
+  foreach ($shipping_array as $vendors_id => $shipping_data) {
+    $vendors_query = tep_db_query ("select vendors_name
+                                    from " . TABLE_VENDORS . "
+                                    where vendors_id = '" . (int)$vendors_id . "'"
+                                  );
+    $vendors_name = 'Unknown';
+    if ($vendors = tep_db_fetch_array($vendors_query)) {
+      $vendors_name = $vendors['vendors_name'];
+    }
+    $shipping_method_array = explode ('_', $shipping_data['id']);
+    // Fix the shipper name where needed
+    switch ($shipping_method_array[0]) {
+      case 'fedex1':
+        $shipping_method = 'Federal Express';
+      case 'upsxml':
+        $shipping_method = 'UPS';
+      case 'usps':
+        $shipping_method = 'USPS';
+      default:
+        $shipping_method = $shipping_method_array[0];
+    } //switch
+    
+    $sql_data_array = array ('orders_id' => $insert_id,
+                             'vendors_id' => $vendors_id,
+                             'shipping_module' => $shipping_method,
+                             'shipping_method' => $shipping_data['title'],
+                             'shipping_cost' => $shipping_data['cost'],
+                             'shipping_tax' =>  $shipping_data['ship_tax'],
+                             'vendors_name' => $vendors_name,
+                             'vendor_order_sent' => 'no'
+                            );
+    tep_db_perform (TABLE_ORDERS_SHIPPING, $sql_data_array);
+  } //foreach ($shipping_array
+//MVS End
 
 // initialized for the email confirmation
   $products_ordered = '';
@@ -188,6 +234,7 @@
                             'products_price' => $order->products[$i]['price'], 
                             'final_price' => $order->products[$i]['final_price'], 
                             'products_tax' => $order->products[$i]['tax'], 
+							'vendors_id' => $order->products[$i]['vendors_id'],
                             'products_quantity' => $order->products[$i]['qty']);
     tep_db_perform(TABLE_ORDERS_PRODUCTS, $sql_data_array);
     $order_products_id = tep_db_insert_id();

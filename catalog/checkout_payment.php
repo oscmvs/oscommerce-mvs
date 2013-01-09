@@ -11,6 +11,26 @@
 */
 
   require('includes/application_top.php');
+  
+  // MVS start 
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CHECKOUT_PAYMENT);
+
+//  print 'Vendor Shipping: ' . SELECT_VENDOR_SHIPPING . "<br>\n";
+//  print 'Array Vendor Shipping: <pre>';
+//  print_r ($shipping);
+//  print '</pre>' . "<br>\n";
+//  print 'Vendor Count: ' . count ($shipping['vendor']) . "<br>\n";
+//  print 'Cart Vendor Count: ' . count ($cart->vendor_shipping) . "<br>\n";
+
+//  exit;
+
+// If a shipping method has not been selected for all vendors, redirect the customer to the shipping method selection page
+  if (SELECT_VENDOR_SHIPPING == 'true') { // This test only works under MVS
+    if (!is_array ($shipping['vendor']) || count ($shipping['vendor']) != count ($cart->vendor_shipping)) { // No shipping selected or not all selected
+      tep_redirect (tep_href_link (FILENAME_CHECKOUT_SHIPPING, 'error_message=' . ERROR_NO_SHIPPING_SELECTED, 'SSL'));
+    }
+  } 
+// MVS end
 
 // if the customer is not logged on, redirect them to the login page
   if (!tep_session_is_registered('customer_id')) {
@@ -78,7 +98,8 @@
   require(DIR_WS_CLASSES . 'payment.php');
   $payment_modules = new payment;
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CHECKOUT_PAYMENT);
+  // MVS
+//  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CHECKOUT_PAYMENT);
 
   $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL'));
   $breadcrumb->add(NAVBAR_TITLE_2, tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));

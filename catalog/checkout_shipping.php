@@ -62,7 +62,12 @@
     $sendto = false;
     tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
   }
-
+//MVS Start
+  if (SELECT_VENDOR_SHIPPING == 'true') {
+    include(DIR_WS_CLASSES . 'vendor_shipping.php');
+    $shipping_modules = new shipping;
+  } else {
+// MVS End
   $total_weight = $cart->show_weight();
   $total_count = $cart->count_contents();
 
@@ -98,7 +103,8 @@
   } else {
     $free_shipping = false;
   }
-
+// MVS
+  }
 // process the selected shipping method
   if ( isset($HTTP_POST_VARS['action']) && ($HTTP_POST_VARS['action'] == 'process') && isset($HTTP_POST_VARS['formid']) && ($HTTP_POST_VARS['formid'] == $sessiontoken) ) {
     if (!tep_session_is_registered('comments')) tep_session_register('comments');
@@ -107,6 +113,68 @@
     }
 
     if (!tep_session_is_registered('shipping')) tep_session_register('shipping');
+	
+	// MVS Start
+      if (SELECT_VENDOR_SHIPPING == 'true') {
+
+        $total_shipping_cost = 0;
+        $shipping_title = MULTIPLE_SHIP_METHODS_TITLE;
+        $vendor_shipping = $cart->vendor_shipping;
+        $shipping = array();
+        foreach ($vendor_shipping as $vendor_id => $vendor_data) {
+          $products_shipped = $_POST['products_' . $vendor_id];
+          $products_array = explode ("_", $products_shipped);
+
+          $shipping_data = $_POST['shipping_' . $vendor_id];
+          $shipping_array = explode ("_", $shipping_data);
+          $module = $shipping_array[0];
+          $method = $shipping_array[1];
+          $ship_tax = $shipping_array[2];
+
+          if ( is_object($$module) || ($module == 'free') ) {
+            if ($module == 'free') {
+              $quote[0]['methods'][0]['title'] = FREE_SHIPPING_TITLE;
+              $quote[0]['methods'][0]['cost'] = '0';
+            } else {
+              $total_weight = $vendor_shipping[$vendor_id]['weight'];
+              $shipping_weight = $total_weight;
+              $cost = $vendor_shipping[$vendor_id]['cost'];
+              $total_count = $vendor_shipping[$vendor_id]['qty'];
+              $quote = $shipping_modules->quote($method, $module, $vendor_id);
+
+            }
+            if (isset($quote['error'])) {
+              tep_session_unregister('shipping');
+            } else {
+              if ( (isset($quote[0]['methods'][0]['title'])) && (isset($quote[0]['methods'][0]['cost'])) ) {
+                $output[$vendor_id] = array('id' => $module . '_' . $method,
+                                            'title' => $quote[0]['methods'][0]['title'],
+                                            'ship_tax' => $ship_tax,
+                                            'products' => $products_array,
+                                            'cost' => $quote[0]['methods'][0]['cost']
+                                           );
+                $total_ship_tax += $ship_tax;
+                $total_shipping_cost += $quote[0]['methods'][0]['cost'];
+              }//if isset
+            }//if isset
+          }//if is_object
+        }//foreach
+        if ($free_shipping == true) {
+          $shipping_title = $quote[0]['module'];
+        } elseif (count($output) <2) {
+          $shipping_title = $quote[0]['methods'][0]['title'];
+        }
+        $shipping = array('id' => $shipping,
+                          'title' => $shipping_title,
+                          'cost' => $total_shipping_cost,
+                          'shipping_tax_total' => $total_ship_tax,
+                          'vendor' => $output
+                         );
+
+        tep_redirect (tep_href_link (FILENAME_CHECKOUT_PAYMENT, '', 'SSL') );
+
+      } else {   
+// MVS End
 
     if ( (tep_count_shipping_modules() > 0) || ($free_shipping == true) ) {
       if ( (isset($HTTP_POST_VARS['shipping'])) && (strpos($HTTP_POST_VARS['shipping'], '_')) ) {
@@ -139,7 +207,9 @@
       $shipping = false;
                 
       tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-    }    
+    } 
+	// MVS      
+      }   
   }
 
 // get all available shipping quotes
@@ -192,6 +262,8 @@ function rowOutEffect(object) {
 }
 //--></script>
 
+
+
 <h1><?php echo HEADING_TITLE; ?></h1>
 
 <?php echo tep_draw_form('checkout_address', tep_href_link(FILENAME_CHECKOUT_SHIPPING, '', 'SSL'), 'post', '', true) . tep_draw_hidden_field('action', 'process'); ?>
@@ -214,10 +286,55 @@ function rowOutEffect(object) {
   <div style="clear: both;"></div>
 
 <?php
-  if (tep_count_shipping_modules() > 0) {
+//MVS
+  if (tep_count_shipping_modules() > 0 || SELECT_VENDOR_SHIPPING == 'true') {
 ?>
 
   <h2><?php echo TABLE_HEADING_SHIPPING_METHOD; ?></h2>
+  
+  <?php
+// MVS Start
+  if (SELECT_VENDOR_SHIPPING == 'true') {
+    require(DIR_WS_MODULES . 'vendor_shipping.php');
+  } else {
+    $quotes = $shipping_modules->quote();
+
+  if ( defined('MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING') && (MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING == 'true') ) {
+    $pass = false;
+
+    switch (MODULE_ORDER_TOTAL_SHIPPING_DESTINATION) {
+      case 'national':
+        if ($order->delivery['country_id'] == STORE_COUNTRY) {
+          $pass = true;
+        }
+        break;
+      case 'international':
+        if ($order->delivery['country_id'] != STORE_COUNTRY) {
+          $pass = true;
+        }
+        break;
+      case 'both':
+        $pass = true;
+        break;
+    }
+
+    $free_shipping = false;
+    if ( ($pass == true) && ($order->info['total'] >= MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER) ) {
+      $free_shipping = true;
+
+      include(DIR_WS_LANGUAGES . $language . '/modules/order_total/ot_shipping.php');
+    }
+  } else {
+    $free_shipping = false;
+  }
+
+// if no shipping method has been selected, automatically select the cheapest method.
+// if the modules status was changed when none were available, to save on implementing
+// a javascript force-selection method, also automatically select the cheapest shipping
+// method if more than one module is now enabled
+    if ( !tep_session_is_registered('shipping') || ( tep_session_is_registered('shipping') && ($shipping == false) && (tep_count_shipping_modules() > 1) ) ) $shipping = $shipping_modules->cheapest();
+//MVS End
+?>
 
 <?php
     if (sizeof($quotes) > 1 && sizeof($quotes[0]) > 1) {
@@ -322,6 +439,7 @@ function rowOutEffect(object) {
 
 <?php
   }
+   }
 ?>
 
   <h2><?php echo TABLE_HEADING_COMMENTS; ?></h2>

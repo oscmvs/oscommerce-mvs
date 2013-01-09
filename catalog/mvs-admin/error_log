@@ -1,0 +1,12 @@
+[26-Dec-2012 02:18:46] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 03:25:26] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 03:25:43] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 03:25:45] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 03:25:57] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 11:56:35] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/modules.php on line 153
+[26-Dec-2012 12:24:52] PHP Fatal error:  Call to undefined function  tep_get_version() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/includes/header.php on line 20
+[26-Dec-2012 23:07:59] PHP Fatal error:  Call to undefined function  tep_get_version() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/includes/header.php on line 20
+[26-Dec-2012 23:17:45] PHP Fatal error:  Call to undefined function  tep_draw_button() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/login.php on line 163
+[26-Dec-2012 23:42:12] PHP Fatal error:  Call to undefined function  tep_draw_button() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/login.php on line 163
+[04-Jan-2013 01:22:04] PHP Fatal error:  Call to undefined function  tep_draw_button() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/login.php on line 163
+[07-Jan-2013 01:12:48] PHP Fatal error:  Call to undefined function  tep_draw_button() in /home/oscqa/public_html/labs/oscmvs2-3-3-1/admin/login.php on line 163

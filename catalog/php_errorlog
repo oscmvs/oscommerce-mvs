@@ -1,1 +1,0 @@
-[23-Dec-2012 19:12:34 CST6CDT] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'ecomme33'@'localhost' (using password: NO) in /home/ecomme33/public_html/labs/oscmvs-2.3.3/catalog/includes/functions/database.php on line 19

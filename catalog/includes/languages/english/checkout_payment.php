@@ -28,4 +28,8 @@ define('TABLE_HEADING_COMMENTS', 'Add Comments About Your Order');
 
 define('TITLE_CONTINUE_CHECKOUT_PROCEDURE', 'Continue Checkout Procedure');
 define('TEXT_CONTINUE_CHECKOUT_PROCEDURE', 'to confirm this order.');
+
+// MVS
+define('ERROR_NO_SHIPPING_SELECTED', 'Error: You have not selected a shipping method for all groups of products. Please select one shipping method for each group of products below.');
+
 ?>

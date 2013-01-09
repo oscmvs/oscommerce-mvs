@@ -302,7 +302,77 @@
         }
       }
     }
+ function vendor_shipping() {
 
+      if (!is_array($this->contents)) return 0;  //Cart is empty
+
+      $this->vendor_shipping = array();  //Initialize the output array
+      reset($this->contents);            //  and reset the input array
+      foreach ($this->contents as $products_id => $value) {  //$value is never used
+        $quantity = $this->contents[$products_id]['qty'];
+
+//mod IndvShip, added products_ship_price
+        $products_query = tep_db_query("select products_id,
+                                               products_price,
+											   products_ship_price,
+                                               products_tax_class_id,
+                                               products_weight,
+                                               vendors_id
+                                        from " . TABLE_PRODUCTS . "
+                                        where products_id = '" . (int)$products_id . "'"
+                                      );
+        if ($products = tep_db_fetch_array($products_query)) {
+          $products_price = $products['products_price'];
+//mod IndvShip
+		  $products_ship_price = $products['products_ship_price'];
+          $products_weight = $products['products_weight'];
+          $vendors_id = ($products['vendors_id'] <= 0) ? 1 : $products['vendors_id'];
+          $products_tax = tep_get_tax_rate($products['products_tax_class_id']);
+
+          //Find special prices (if any)
+          $specials_query = tep_db_query("select specials_new_products_price
+                                          from " . TABLE_SPECIALS . "
+                                          where products_id = '" . (int)$products_id . "'
+                                            and status = '1'"
+                                        );
+          if (tep_db_num_rows ($specials_query)) {
+            $specials = tep_db_fetch_array($specials_query);
+            $products_price = $specials['specials_new_products_price'];
+          }
+
+          //Add values to the output array
+          $this->vendor_shipping[$vendors_id]['weight'] += ($quantity * $products_weight);
+          $this->vendor_shipping[$vendors_id]['cost'] += tep_add_tax($products_price, $products_tax) * $quantity;
+          $this->vendor_shipping[$vendors_id]['qty'] += $quantity;
+//mod IndvShip
+		  $this->vendor_shipping[$vendors_id]['ship_cost'] += ($quantity * $products_ship_price);		  		  
+          $this->vendor_shipping[$vendors_id]['products_id'][] = $products_id; //There can be more than one product
+        }
+
+        // Add/subtract attributes prices (if any)
+        if (isset($this->contents[$products_id]['attributes'])) {
+          reset($this->contents[$products_id]['attributes']);
+          foreach ($this->contents[$products_id]['attributes'] as $option => $value) {
+            $attribute_price_query = tep_db_query("select options_values_price,
+                                                          price_prefix
+                                                   from " . TABLE_PRODUCTS_ATTRIBUTES . "
+                                                   where products_id = '" . (int)$products_id . "'
+                                                     and options_id = '" . (int)$option . "'
+                                                     and options_values_id = '" . (int)$value . "'"
+                                                 );
+            $attribute_price = tep_db_fetch_array($attribute_price_query);
+            if ($attribute_price['price_prefix'] == '+') {
+              $this->vendor_shipping[$vendors_id]['cost'] += $quantity * tep_add_tax($attribute_price['options_values_price'], $products_tax);
+            } else {
+              $this->vendor_shipping[$vendors_id]['cost'] -= $quantity * tep_add_tax($attribute_price['options_values_price'], $products_tax);
+            }
+          }
+        }
+      }
+
+      return $this->vendor_shipping;
+    }
+//MVS End
     function attributes_price($products_id) {
       $attributes_price = 0;
 
@@ -321,7 +391,56 @@
 
       return $attributes_price;
     }
+//MVS - added function to only retrieve specific vendors products
+    function get_vendors_products($vendor) {
+      global $languages_id;
 
+      if (!is_array($this->contents)) return false;
+
+      $products_array = array();
+      reset($this->contents);
+      while (list($products_id, ) = each($this->contents)) {
+//MVS - upxml start - added v.vendors_id, v.vendors_name, and v.vendors_id = p.vendors_id to  v.vendors_id = '" . $vendor . "' and p.vendors_id = '" . $vendor . "'
+//upsxml dimensions start - added  p.products_length, p.products_width, p.products_height, p.products_ready_to_ship, 
+        $products_query = tep_db_query("select p.products_id, pd.products_name, p.products_model, p.products_image, p.products_price, p.products_weight, p.products_length, p.products_width, p.products_height, p.products_ready_to_ship, p.products_tax_class_id, v.vendors_id, v.vendors_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_VENDORS . " v where p.products_id = '" . (int)$products_id . "' and pd.products_id = p.products_id and v.vendors_id = '" . $vendor . "' and p.vendors_id = '" . $vendor . "' and pd.language_id = '" . (int)$languages_id . "'");
+        //upsxml dimensions end
+        //MVS end
+        if ($products = tep_db_fetch_array($products_query)) {
+          $prid = $products['products_id'];
+          $products_price = $products['products_price'];
+
+          $specials_query = tep_db_query("select specials_new_products_price from " . TABLE_SPECIALS . " where products_id = '" . (int)$prid . "' and status = '1'");
+          if (tep_db_num_rows($specials_query)) {
+            $specials = tep_db_fetch_array($specials_query);
+            $products_price = $specials['specials_new_products_price'];
+          }
+
+          $products_array[] = array('id' => $products_id,
+                                    'name' => $products['products_name'],
+                                    'model' => $products['products_model'],
+                                    'image' => $products['products_image'],
+                                    'price' => $products_price,
+                                    'quantity' => $this->contents[$products_id]['qty'],
+                                    'weight' => $products['products_weight'],
+//upsxml dimensions start
+                                    'length' => ($products['product_free_shipping'] == '1' ? 0 : $products['products_length']),
+          			                    'width' => ($products['product_free_shipping'] == '1' ? 0 : $products['products_width']),
+          			                    'height' => ($products['product_free_shipping'] == '1' ? 0 : $products['products_height']),
+          			                    'ready_to_ship' => $products['products_ready_to_ship'],
+//upsxml dimensions end
+                                    'final_price' => ($products_price + $this->attributes_price($products_id)),
+                                    'tax_class_id' => $products['products_tax_class_id'],
+                                    //MVS start
+                                    'vendors_id' => $products['vendors_id'],
+                                    'vendors_name' => $products['vendors_name'],
+                                    //MVS end
+                                    'attributes' => (isset($this->contents[$products_id]['attributes']) ? $this->contents[$products_id]['attributes'] : ''));
+        }
+      }
+
+      return $products_array;
+    }
+//MVS - upsxml end
     function get_products() {
       global $languages_id;
 
@@ -330,8 +449,10 @@
       $products_array = array();
       reset($this->contents);
       while (list($products_id, ) = each($this->contents)) {
-        $products_query = tep_db_query("select p.products_id, pd.products_name, p.products_model, p.products_image, p.products_price, p.products_weight, p.products_tax_class_id from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_id = '" . (int)$products_id . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "'");
-        if ($products = tep_db_fetch_array($products_query)) {
+      //MVS
+//upsxml dimensions - added  p.products_length, p.products_width, p.products_height, p.products_ready_to_ship, 
+        $products_query = tep_db_query("select p.products_id, pd.products_name, p.products_model, p.products_image, p.products_price, p.products_weight, p.products_length, p.products_width, p.products_height, p.products_ready_to_ship, p.products_tax_class_id, v.vendors_id, v.vendors_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_VENDORS . " v where p.products_id = '" . (int)$products_id . "' and pd.products_id = p.products_id and v.vendors_id = p.vendors_id and pd.language_id = '" . (int)$languages_id . "'");
+    if ($products = tep_db_fetch_array($products_query)) {
           $prid = $products['products_id'];
           $products_price = $products['products_price'];
 
@@ -350,6 +471,11 @@
                                     'weight' => $products['products_weight'],
                                     'final_price' => ($products_price + $this->attributes_price($products_id)),
                                     'tax_class_id' => $products['products_tax_class_id'],
+									//MVS start
+                                    'vendors_id' => $products['vendors_id'],
+                                    'vendors_name' => $products['vendors_name'],
+//MVS end
+         
                                     'attributes' => (isset($this->contents[$products_id]['attributes']) ? $this->contents[$products_id]['attributes'] : ''));
         }
       }

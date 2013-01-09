@@ -60,4 +60,12 @@
   define('FILENAME_SSL_CHECK', 'ssl_check.php');
   define('FILENAME_TELL_A_FRIEND', 'tell_a_friend.php');
   define('FILENAME_UPCOMING_PRODUCTS', 'upcoming_products.php');
+  
+  // Ship estimator
+  define('FILENAME_PRODUCTS_SHIP_ESTIMATOR', 'products_ship_estimator.php');
+  define('FILENAME_REDIRECT', 'redirect.php');
+  define('FILENAME_REVIEWS', 'reviews.php');
+// Ship estimator
+// Ship estimator
+  define('FILENAME_SHIP_ESTIMATOR', 'ship_estimator.php');
 ?>

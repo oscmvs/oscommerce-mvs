@@ -445,9 +445,9 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 <?php
 
     if ($action == 'new') {
-      echo tep_image_submit('button_insert.gif', IMAGE_INSERT) . ' <a href="' . tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array ('action'))) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>';
+		echo tep_draw_button(IMAGE_SAVE, 'disk', null, 'primary') . tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('action'))));  	  
     } else {
-      echo tep_image_submit('button_update.gif', IMAGE_UPDATE, 'action=update') . ' <a href="' . tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('action'))) . 'action=update' , '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>';
+		echo tep_draw_button(IMAGE_SAVE, 'disk', null, 'primary') . tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('action'))));
     }        
 ?>
         </td>
@@ -545,7 +545,8 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
         $contents[] = array ('text' => tep_draw_checkbox_field('delete_products', $vendors_id, false) . '&nbsp; Delete Products?');
         $contents[] = array (
           'align' => 'center',
-          'text' => '<br>' . tep_image_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array ('vendors_id', 'action')) . 'vendors_id=' . $vInfo->vendors_id) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+          'text' => '<br>' . tep_draw_button(IMAGE_DELETE, 'trash', null, 'primary').
+		  					tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_VENDORS, 'vendors_id=' . $vInfo->vendors_id . '&page='. $_GET['page'])));
         break;
 
       default :
@@ -564,7 +565,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 
           $contents[] = array (
             'align' => 'center',
-            'text' => tep_draw_button(IMAGE_EDIT, 'document', tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('vendors_id', 'action')) . 'vendors_id=' . $vInfo->vendors_id . '&action=edit')) .
+            'text' => tep_draw_button(IMAGE_EDIT, 'document', tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('vendors_id', 'action')) . 'vendors_id=' . $vInfo->vendors_id . '&action=edit')) .			
 					  tep_draw_button(IMAGE_DELETE, 'trash', tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('vendors_id', 'action')) . 'vendors_id=' . $vInfo->vendors_id . '&action=confirm')).'<br>'.					  
 					  tep_draw_button(IMAGE_SHIPPING, 'document', tep_href_link(FILENAME_VENDOR_MODULES . '?set=shipping&vendors_id=' . $vInfo->vendors_id)).
 					  tep_draw_button(IMAGE_ORDERS, 'cart', tep_href_link(FILENAME_ORDERS_VENDORS . '?vendors_id=' . $vInfo->vendors_id)).					

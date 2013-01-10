@@ -255,8 +255,9 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
       $heading[] = array('text' => '<b>' . $mInfo->title . '</b>');
 
       $contents = array('form' => tep_draw_form('modules', FILENAME_VENDOR_MODULES, 'module=' . $HTTP_GET_VARS['module'] . '&action=save&vendors_id=' . $vendors_id));
-      $contents[] = array('text' => $keys);
-      $contents[] = array('align' => 'center', 'text' => '<br>' . tep_image_submit('button_update.gif', IMAGE_UPDATE) . ' <a href="' . tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $HTTP_GET_VARS['module'] . '&vendors_id=' . $vendors_id) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('text' => $keys);	  
+	  $contents[] = array('align' => 'center', 'text' => '<br />' . tep_draw_button(IMAGE_SAVE, 'disk', null, 'primary') . tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $HTTP_GET_VARS['module'] . '&vendors_id=' . $vendors_id)));
+			
       break;
       
     default:

@@ -54,7 +54,7 @@ class XMLDocument {
     }
 
     function getValueByPath($path) {
-        $pathArray = split("/", $path);
+        $pathArray = explode("/", $path);
         if ($pathArray[0] == $this->root->getName()) {
             //print_r("Looking for " . $pathArray[0] . "<br>");
             array_shift($pathArray);
@@ -130,7 +130,7 @@ class Node {
     }
 
     function getValueByPath($path) {
-        $pathArray = split('/', $path);
+        $pathArray = explode('/', $path);
         $node = $this;
         for ($i = 0; $i < count($pathArray); $i++) {
             //print_r("Looking for " . $pathArray[$i] ."<br>");

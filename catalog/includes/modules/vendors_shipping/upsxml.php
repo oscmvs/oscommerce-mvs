@@ -823,7 +823,7 @@
         }
         curl_close ($ch);
         }
-
+		
         if(!$xmlResponse)  {
             $xmlResponse = "<?xml version=\"1.0\"?>\n".
             "<RatingServiceSelectionResponse>\n".

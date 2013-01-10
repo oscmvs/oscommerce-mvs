@@ -116,7 +116,7 @@
 //        $order_total = $cart->vendor_shipping[$vendors_id]['weight'];
 //      }
 
-      $table_cost = split("[:,]", @ constant('MODULE_SHIPPING_TABLE_COST_' . $vendors_id));
+      $table_cost = preg_split("/[:,]/", @ constant('MODULE_SHIPPING_TABLE_COST_' . $vendors_id));
       $size = sizeof($table_cost);
       for ($i = 0, $n = $size; $i < $n; $i += 2) {
         if ($order_total <= $table_cost[$i]) {

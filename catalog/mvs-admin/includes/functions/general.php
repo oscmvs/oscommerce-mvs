@@ -1590,6 +1590,52 @@ function tep_cfg_usps_extraservices($select_array, $key_value, $key = '')
     	}
     return $string;
 	}
-// USPS END
+	
+  function tep_cfg_multiinput_list($select_array, $key_value, $key = '') {
+    $key_values = explode( ", ", $key_value);
+    for ($i=0; $i<sizeof($select_array); $i++) {
+      $name = (($key) ? 'configuration[' . $key . '][]' : 'configuration_value');
+      $string .= '<br><input type="text" name="' . $name . '" value="' . $key_values[$i] . '"> ' . $select_array[$i];
+    }
+    $string .= '<input type="hidden" name="' . $name . '" value="--none--">';
+    return $string;
+  }	
+  
+  function tep_cfg_multiinput_duallist_oz($select_array, $key_value, $key = '') {
+    $key_values = explode( ", ", $key_value);
+    $string .= '<center>';
+    for ($i=0; $i<sizeof($select_array); $i++) {
+	$current_key_value = current($key_values);
+      $name = (($key) ? 'configuration[' . $key . '][]' : 'configuration_value');
+      $string .= '<br><input type="text" name="' . $name . '" size="3" value="' . $current_key_value . '"><i>oz</i>';
+	$string .= ' <b><</b> ' . $select_array[$i] . ' <u><b><</b></u>';
+	next($key_values);
+	$current_key_value = current($key_values);
+	$string .= '<input type="text" name="' . $name . '" size="3" value="' . $current_key_value . '"><i>oz</i>';
+	next($key_values);
+    }
+    $string .= '<input type="hidden" name="' . $name . '" value="--none--">';
+    $string .= '</center>';
+    return $string;
+  }  
 
+  function tep_cfg_multiinput_duallist_lb($select_array, $key_value, $key = '') {
+    $key_values = explode( ", ", $key_value);
+    $string .= '<center>';
+    for ($i=0; $i<sizeof($select_array); $i++) {
+	$current_key_value = current($key_values);
+      $name = (($key) ? 'configuration[' . $key . '][]' : 'configuration_value');
+      $string .= '<br><input type="text" name="' . $name . '" size="3" value="' . $current_key_value . '"><i>lbs</i>';
+	$string .= ' <b><</b> ' . $select_array[$i] . ' <u><b><</b></u>';
+	next($key_values);
+	$current_key_value = current($key_values);
+	$string .= '<input type="text" name="' . $name . '" size="3" value="' . $current_key_value . '"><i>lbs</i>';
+	next($key_values);
+    }
+    $string .= '<input type="hidden" name="' . $name . '" value="--none--">';
+    $string .= '</center>';
+    return $string;
+  }
+    
+// USPS END
 ?>

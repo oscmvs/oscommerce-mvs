@@ -24,7 +24,7 @@
         while (list($key, $value) = each($HTTP_POST_VARS['configuration'])) {
           if( is_array ($value ) ) {
             $value = implode (", ", $value);
-            $value = ereg_replace (", --none--", "", $value);
+			$value = preg_replace ("/, --none--/", "", $value);
           }
 
           tep_db_query("update " . TABLE_VENDOR_CONFIGURATION . " set configuration_value = '" . $value . "' where configuration_key = '" . $key .  "' and vendors_id = '" . $vendors_id . "'");
@@ -269,7 +269,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
           $keys .= '<b>' . $value['title'] . '</b><br>';
           if ($value['use_function']) {
             $use_function = $value['use_function'];
-            if (ereg('->', $use_function)) {
+            if (preg_match('/->/', $use_function)) {
               $class_method = explode('->', $use_function);
               if (!is_object(${$class_method[0]})) {
                 include(DIR_WS_CLASSES . $class_method[0] . '.php');
@@ -285,11 +285,14 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
           $keys .= '<br><br>';
         }
         $keys = substr($keys, 0, strrpos($keys, '<br><br>'));
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $mInfo->code . '&action=remove&vendors_id=' . $vendors_id) . '">' . tep_image_button('button_module_remove.gif', IMAGE_MODULE_REMOVE) . '</a> <a href="' . tep_href_link(FILENAME_VENDOR_MODULES, (isset($HTTP_GET_VARS['module']) ? '&module=' . $HTTP_GET_VARS['module'] : '') . '&action=edit&vendors_id=' . $vendors_id) . '">' . tep_image_button('button_edit.gif', IMAGE_EDIT) . '</a>');
+		
+		$contents[] = array('align' => 'center', 'text' => tep_draw_button(IMAGE_EDIT, 'document', tep_href_link(FILENAME_VENDOR_MODULES, (isset($HTTP_GET_VARS['module']) ? '&module=' . $HTTP_GET_VARS['module'] : '') . '&action=edit&vendors_id=' . $vendors_id)) . tep_draw_button(IMAGE_MODULE_REMOVE, 'minus', tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $mInfo->code . '&action=remove&vendors_id=' . $vendors_id)));
+				
         $contents[] = array('text' => '<br>' . $mInfo->description);
         $contents[] = array('text' => '<br>' . $keys);
       } else {
-        $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $mInfo->code . '&action=install&vendors_id=' . $vendors_id) . '">' . tep_image_button('button_module_install.gif', IMAGE_MODULE_INSTALL) . '</a>');
+		$contents[] = array('align' =>'center', 'text' => tep_draw_button(IMAGE_MODULE_INSTALL, 'plus', tep_href_link(FILENAME_VENDOR_MODULES, 'module=' . $mInfo->code . '&action=install&vendors_id=' . $vendors_id)));
+				
         $contents[] = array('text' => '<br>' . $mInfo->description);
       }
       break;

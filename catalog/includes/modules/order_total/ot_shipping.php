@@ -44,8 +44,8 @@
           $order->info['shipping_cost'] = 0;
         }
       }
-
-      $module = substr($GLOBALS['shipping']['id'], 0, strpos($GLOBALS['shipping']['id'], '_'));
+	
+      $module = substr($GLOBALS['shipping']['vendor'][1]['id'], 0, strpos($GLOBALS['shipping']['vendor'][1]['id'], '_'));
 
       if (tep_not_null($order->info['shipping_method'])) {
         if ($GLOBALS[$module]->tax_class > 0) {

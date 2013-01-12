@@ -28,8 +28,8 @@
         $vendors_phone1 = tep_db_prepare_input($HTTP_POST_VARS['vendors_phone1']);
         $vendors_phone2 = tep_db_prepare_input($HTTP_POST_VARS['vendors_phone2']);
         $vendors_email = tep_db_prepare_input($HTTP_POST_VARS['vendors_email']);
-        $vendors_send_email = tep_db_prepare_input($HTTP_POST_VARS['vendors_send_email']);
-        $vendors_status_send = tep_db_prepare_input($HTTP_POST_VARS['vendors_status_send']);
+        $vendors_send_email = 0; //tep_db_prepare_input($HTTP_POST_VARS['vendors_send_email']);
+        $vendors_status_send = 0; //tep_db_prepare_input($HTTP_POST_VARS['vendors_status_send']);
         $vendor_street = tep_db_prepare_input($HTTP_POST_VARS['vendor_street']);
         $vendor_add2 = tep_db_prepare_input($HTTP_POST_VARS['vendor_add2']);
         $vendor_city = tep_db_prepare_input($HTTP_POST_VARS['vendor_city']);
@@ -328,6 +328,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
       $orders_status_array[$orders_status['orders_status_id']] = $orders_status['orders_status_name'];
     }
 ?>
+<!--
          <tr>
            <td class="main"><?php echo TEXT_VENDORS_STATUS_EMAIL; ?></td>
            <td class="main"> <?php echo tep_draw_separator('pixel_trans.gif', '1', '15') . tep_draw_pull_down_menu('vendors_status_send', $orders_statuses, $vInfo->vendors_status_send); ?></td>
@@ -348,6 +349,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 ?>
            </td>
          </tr>
+-->         
          <tr>
            <td class="main"><?php echo TEXT_VENDORS_CONTACT; ?></td>
            <td class="main"><?php echo tep_draw_input_field('vendors_contact', $vInfo->vendors_contact, 'maxlength="64"'); ?></td>
@@ -470,8 +472,8 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
             <td valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr class="dataTableHeadingRow">
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_VENDORS; ?></td>
-                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_CONTACT; ?></td>
-                <td class="dataTableHeadingContent" align="center"><?php echo TABLE_SEND_EMAIL; ?></td>
+                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_CONTACT; ?></td>                
+                <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_PHONE1; ?></td>
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
@@ -497,16 +499,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 ?>
                 <td class="dataTableContent"><?php echo $vendor_data['vendors_name']; ?></td>
                 <td class="dataTableContent"><?php echo $vendor_data['vendors_contact']; ?></td>
-                <td class="dataTableContent" align="center">
-<?php
-
-      if ($vendor_data['vendors_send_email'] == '1') {
-        echo tep_image(DIR_WS_IMAGES . 'icon_status_green.gif', IMAGE_ICON_STATUS_GREEN, 10, 10) . '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_VENDORS, 'action=setflag&flag=0&vendors_id=' . $vendor_data['vendors_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_red_light.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
-      } else {
-        echo '<a href="' . tep_href_link(FILENAME_VENDORS, 'action=setflag&flag=1&vendors_id=' . $vendor_data['vendors_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_green_light.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>&nbsp;&nbsp;' . tep_image(DIR_WS_IMAGES . 'icon_status_red.gif', IMAGE_ICON_STATUS_RED, 10, 10);
-      }
-?>
-                </td>
+                <td class="dataTableContent"><?php echo $vendor_data['vendors_phone1']; ?></td>                               
                 <td class="dataTableContent" align="right"><?php if (isset($vInfo) && is_object($vInfo) && ($vendor_data['vendors_id'] == $vInfo->vendors_id)) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_VENDORS, tep_get_all_get_params(array('vendors_id')) . 'vendors_id=' . $vendor_data['vendors_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php

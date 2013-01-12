@@ -21,11 +21,13 @@
   $vendors_id = 0;
   if (isset ($_GET['vendors_id'])) {
     $vendors_id = (int) $_GET['vendors_id'];
+  }else{
+	  $vendors_id = (int) $_POST['vendors_id'];
   }
   
   $line_filter = 'desc';
   if (isset ($_GET['line']) && $_GET['line'] == 'asc') {
-    $line_filter == $_GET['line'];
+    $line_filter = $_GET['line'];
   }
 
   $sort_by_filter = 'orders_id';
@@ -51,14 +53,14 @@
   
   $status = '';
   if (isset ($_POST['status']) && $_POST['status'] != '') {
-    $status = preg_replace("(\r\n|\n|\r)", '', $status); // Remove CR &/ LF
-    $status = preg_replace("/[^A-Za-z0-9]/i", '', $status); // strip everthing except alphanumerics
+    $status = $_POST['status'];
   }
-
+  
   $sent = '';
   if (isset ($_GET['sent']) && ($_GET['sent'] == 'yes' || $_GET['sent'] == 'no') ) {
-    $sent == $_GET['sent'];
+    $sent = $_GET['sent'];
   }
+  
   
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -154,7 +156,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
                 <td class="main" align="left"><?php echo 'Filter by email sent: <a href="' . tep_href_link(FILENAME_ORDERS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&sent=yes') . '"><b>YES</a></b>&nbsp; <a href="' . tep_href_link(FILENAME_ORDERS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&sent=no') . '"><b>NO</a></b>'; ?></td>
 <?php
   if ($line_filter == 'asc') {
-    if (isset ($status) ) {
+	if ($status != '') {
 ?>
                 <td class="main" align="right"><?php echo 'Change to <a href="' . tep_href_link (FILENAME_ORDERS_VENDORS, 'vendors_id=' . $vendors_id . '&line=desc' . '&sent=' . $sent . '&status=' . $status) . '"><b>DESCENDING</a></b> order'; ?></td>
 <?php
@@ -165,7 +167,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
     }  
 
   } else {
-    if (isset ($status) ) {
+    if ($status != '') {
 ?>
                 <td class="main" align="right"><?php echo 'Change to <a href="' . tep_href_link(FILENAME_ORDERS_VENDORS, '&vendors_id=' . $vendors_id . '&line=asc' . '&sent=' . $sent . '&status=' . $status) . '"><b>ASCENDING</a></b> order'; ?></td>
 <?php
@@ -227,7 +229,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
     $vendors_orders_data_query = tep_db_query ("select distinct orders_id, vendor_order_sent from " . TABLE_ORDERS_SHIPPING . " where vendors_id='" . $vendors_id . "' group by orders_id " . $line_filter . "");
   }
   while ($vendors_orders_data = tep_db_fetch_array ($vendors_orders_data_query)) {
-    if (isset ($status)) {
+	if ($status != '') {
       $orders_query = tep_db_query ("select distinct o.customers_id, o.orders_id, o.customers_name, o.payment_method, o.date_purchased, o.last_modified, o.currency, o.currency_value, s.orders_status_name, ot.text as order_total from " . TABLE_ORDERS . " o left join " . TABLE_ORDERS_TOTAL . " ot on (o.orders_id = ot.orders_id), " . TABLE_ORDERS_STATUS . " s where o.orders_status = '" . $status . "' and o.orders_status = s.orders_status_id and s.language_id = '" . $languages_id . "' and ot.class = 'ot_total' and o.orders_id =  '" . $vendors_orders_data['orders_id'] . "' order by o." . $sort_by_filter . " ASC");
     } else {
       $orders_query = tep_db_query ("select distinct o.customers_id, o.orders_id, o.customers_name, o.payment_method, o.date_purchased, o.last_modified, o.currency, o.currency_value, s.orders_status_name, ot.text as order_total from " . TABLE_ORDERS . " o left join " . TABLE_ORDERS_TOTAL . " ot on (o.orders_id = ot.orders_id), " . TABLE_ORDERS_STATUS . " s where o.orders_status = s.orders_status_id and s.language_id = '" . $languages_id . "' and ot.class = 'ot_total' and o.orders_id =  '" . $vendors_orders_data['orders_id'] . "' order by o." . $sort_by_filter . " ASC");

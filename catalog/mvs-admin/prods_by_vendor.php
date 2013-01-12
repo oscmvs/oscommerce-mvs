@@ -154,9 +154,9 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 
   if ($show_order == 'desc') {
     // Test code -- 3 lines
-    echo 'Click for <a href="' . tep_href_link (FILENAME_PRODS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&show_order=asc') . '"><b>ascending order</b></a>';
+    //echo 'Click for <a href="' . tep_href_link (FILENAME_PRODS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&show_order=asc') . '"><b>ascending order</b></a>';
   } else {
-    echo 'Click for <a href="' . tep_href_link (FILENAME_PRODS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&show_order=desc') . '"><b>descending order</b></a>';
+    //echo 'Click for <a href="' . tep_href_link (FILENAME_PRODS_VENDORS, '&vendors_id=' . $vendors_id . '&line=' . $line_filter . '&show_order=desc') . '"><b>descending order</b></a>';
   }
 ?>
               </td>
@@ -180,15 +180,15 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
             <td valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="1">
               <tr class="dataTableHeadingRow">
                 <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_VENDOR; ?></td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=prod') . '">' . TABLE_HEADING_PRODUCTS_NAME . '</a>'; ?>&nbsp;</td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=vpid') . '">' . TABLE_HEADING_VENDORS_PRODUCT_ID . '</a>'; ?></td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=pid') . '">' .  TABLE_HEADING_PRODUCTS_ID . '</a>'; ?></td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=qty') . '">' .  TABLE_HEADING_QUANTITY . '</a>'; ?></td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=vprice') . '">' .  TABLE_HEADING_VENDOR_PRICE . '</a>'; ?></td>
-                <td class="dataTableHeadingContent" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_PRODS_VENDORS, 'vendors_id=' . $vendors_id . '&line=price') . '">' .  TABLE_HEADING_PRICE . '</a>'; ?></td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_PRODUCTS_NAME; ?>&nbsp;</td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_VENDORS_PRODUCT_ID; ?></td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_PRODUCTS_ID; ?></td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_QUANTITY; ?></td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_VENDOR_PRICE; ?></td>
+                <td class="dataTableHeadingContent" align="left"><?php echo TABLE_HEADING_PRICE; ?></td>
               </tr>
               <tr class="dataTableRow">
-                <td class="dataTableContent"><?php echo '<a href="' . tep_href_link(FILENAME_VENDORS, '&vendors_id=' . $vendors_id . '&action=edit') . '" TARGET="_blank"><b>' . $vendors['name'] . '</a></b>'; ?></td>
+                <td class="dataTableContent"><?php echo $vendors['name']; ?></td>
                 <td class="dataTableContent"><?php echo ''; ?></td>
                 <td class="dataTableContent"><?php echo ''; ?></td>
                 <td class="dataTableContent"><?php echo ''; ?></td>

@@ -21,29 +21,44 @@
   $debug_arrive = 'no';
   $debug_sent = 'no';
 
-  $vendors_id = $vID;
-  $oID = $oID;
-  $vendor_order_sent = $vOS;
+  if ($_GET['vID'] != ''){ $vendors_id = $_GET['vID']; }else{ $vendors_id = $_POST['vID']; }
+  if ($vendors_id == ''){ 
+  	if ($_GET['vendors_id'] != ''){
+		$vendors_id = $_GET['vendors_id']; 	
+	}else{ 
+  		$vendors_id = $_POST['vendors_id']; 
+  	}
+  }
+  
+  if ($_GET['oID'] != ''){ $oID = $_GET['oID']; }else{ $oID = $_POST['oID']; }
+  if ($_GET['vOS'] != ''){ $vOS = $vendor_order_sent = $_GET['vOS']; }else{ $vOS = $vendor_order_sent = $_POST['vOS']; }  
+  
+  //print $vendors_id.' - '.$oID .' - '.$vendor_order_sent;
+  
   if ($debug == 'yes') {
     echo 'The vendor post data: ' . $vendors_id . ' ' . $oID . ' ' . $vendor_order_sent . '<br>';
   }
 
   $error = false;
   if (isset ($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'send_vendor_email')) {
-    //  $name = tep_db_prepare_input($HTTP_POST_VARS['name']);
+
     $email = stripslashes($HTTP_POST_VARS['email']);
     $the_email = stripslashes($HTTP_POST_VARS['the_email']);
     $the_contact = stripslashes($HTTP_POST_VARS['the_contact']);
     $oID = stripslashes($HTTP_POST_VARS['order_number']);
     $the_name = stripslashes($HTTP_POST_VARS['the_name']);
     $vendors_id = $HTTP_POST_VARS['vID'];
+	
     if ($debug_sent == 'yes') {
       echo 'All the posted data is here: <br>' . (int) $vendors_id . '<br>' . $the_email . '<br>' . $the_contact . '<br>' . $oID . '<br>' . $the_name . '<br>' . $email;
-      echo 'All the action: <br>' . $action;
+      echo 'All the action: <br>' . $HTTP_GET_VARS['action'];
     }
-    if ($action == 'send_vendor_email') {
-      if (tep_mail($the_name, $the_email, EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID, $email . '<br>', STORE_NAME, STORE_OWNER_EMAIL_ADDRESS) ) $vendor_order_sent = 'yes';
-
+    if ($HTTP_GET_VARS['action'] == 'send_vendor_email') {
+      
+	  if (tep_mail($the_name, $the_email, EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID, $email . '<br>', STORE_NAME, STORE_OWNER_EMAIL_ADDRESS) ){
+		$vendor_order_sent = 'yes';
+	  }
+	  			
       if ( $vendor_order_sent == 'yes') {
         tep_db_query ("update " . TABLE_ORDERS_SHIPPING . " set vendor_order_sent = 'yes' where orders_id = '" . (int) $oID . "'  and vendors_id = '" . (int) $vendors_id . "'");
       } else {
@@ -229,30 +244,29 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
       }
     }
     $email = $email . '</table><br><HR><br>';
-    /*
-      tep_mail($the_name, $the_email, EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID ,  $email .  '<br>', STORE_NAME, STORE_OWNER_EMAIL_ADDRESS)  ;
-       $vendor_order_sent = 'yes';
-    
-       tep_db_query("update " . TABLE_ORDERS_SHIPPING . " set order_sent = '" . tep_db_input($vendor_order_sent) . "' where orders_id = '" . (int)$oID . "'  and vendors_id = '" . (int)$vendors_id . "'");
-      */
+
     if ($debug == 'yes') {
       echo 'The $email(including headers:<br>Vendor Email Addy' . $the_email . '<br>Vendor Name' . $the_name . '<br>Vendor Contact' . $the_contact . '<br>Body--<br>' . $email . '<br>';
     }
   }
 
-  if (isset($HTTP_GET_VARS['action']) &&($HTTP_GET_VARS['action'] == 'success')) {
+  if (isset($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'success')) {
 ?>
             </td>
           </tr>
           <tr>
-            <td class="main"><?php echo '<b>Congratulations!  The email has been sent to <big>' . $contact . ' </b></big><br>For order number <b>' . $oID . '</b>';?></td>
-            <td class="pageHeading" align="left"><?php echo '<a href="' . tep_href_link(FILENAME_ORDERS_VENDORS) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+            <td class="main"><?php echo '<b>Congratulations!  The email has been sent to <big>' . $_GET['contact'] . ' </b></big><br>For order number <b>' . $oID . '</b>';?></td>
+            <td class="pageHeading" align="left">
+			<?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_ORDERS,'&action=edit&oID=' . $oID ) ); ?>
+                     
+            </td>
+           </tr>
+   	         
 <?php
 
-  } 
-  if (isset($HTTP_GET_VARS['action']) &&($HTTP_GET_VARS['action'] == 'preview')) {
-  
-  
+  }
+   	 
+  if (isset($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'preview')) {  
 ?>
             </td>
           </tr>
@@ -260,7 +274,10 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
             <td><table border="0" width="100%" cellpadding="0" cellspacing="2">
               <tr>
                 <td class="main"><?php echo 'The email will look like this: <br>'; ?></td>
-                <td align="center"><?php echo '<a href="' . tep_href_link(FILENAME_VENDORS_EMAIL_SEND, '&vID=' . $vID . '&oID=' . $oID . '&vOS=' . $vOS) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>&nbsp;<a href="' . tep_href_link(FILENAME_ORDERS_VENDORS, '&vID=' . $vendors_id) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a></td>'; ?></td>
+                <td align="center">
+				<?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_VENDORS_EMAIL_SEND, '&vID=' . $_GET['vID'] . '&oID=' . $oID . '&vOS=' . $vOS) ); ?>
+                <?php echo tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_ORDERS, 'action=edit&oID=' . $oID)); ?>
+                </td>
               </tr>
               <tr>
                 <td colspan="3"><?php echo tep_draw_separator(); ?></td>
@@ -287,18 +304,20 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
                   <?php echo tep_draw_hidden_field('vID', stripslashes($vID));?></td>
               </tr>
               <tr>
-                <td align="right"><?php echo tep_image_submit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
+                <td align="right"><?php echo tep_draw_button(IMAGE_SEND_EMAIL, 'mail-closed', null, 'primary'); ?></td>
               </tr>
             </table></td>
           </tr>
         </table></form></td>
       <tr>
 <?php } else { ?>
-      <tr><?php echo tep_draw_form('mail', FILENAME_VENDORS_EMAIL_SEND, 'action=preview' . '&vID=' . $vendors_id . 'oID=' . $oID . '&vOS=' . $vOS); ?>
+<?php if ($HTTP_GET_VARS['action'] != 'success'){ ?>
+
+      <tr><?php echo tep_draw_form('mail', FILENAME_VENDORS_EMAIL_SEND, 'action=preview' . '&vID=' . $vendors_id . '&oID=' . $oID . '&vOS=' . $vOS); ?>
         <td><table border="0" width="100%" cellpadding="0" cellspacing="2">
           <tr>
             <td class="main"><?php echo 'The body of the email will look like this, this is what your Vendor will see when they open the email: <br>';?></td>
-            <td align="center"><?php echo '<a href="' . tep_href_link(FILENAME_ORDERS_VENDORS, '&vID=' . $vendors_id) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a></td>'; ?></td>
+            <td align="center"><?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_ORDERS, 'action=edit&oID=' . $oID)); ?></td>
           </tr>
           <tr>
             <td colspan="3"><?php echo tep_draw_separator(); ?></td>
@@ -317,7 +336,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
             <td align="right"><?php echo tep_draw_hidden_field('vID', $vID);?>
               <?php echo tep_draw_hidden_field('oID', $oID);?>
               <?php echo tep_draw_hidden_field('vOS', $vOS);?>
-              <?php echo tep_image_submit('button_preview.gif', IMAGE_PREVIEW); ?></td>
+              <?php echo  tep_draw_button(IMAGE_PREVIEW, 'document', null, 'primary'); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -325,6 +344,7 @@ $.datepicker.setDefaults($.datepicker.regional['<?php echo JQUERY_DATEPICKER_I18
 <?php
 
   }
+}
 ?>
 
 <!-- body_text_eof //-->

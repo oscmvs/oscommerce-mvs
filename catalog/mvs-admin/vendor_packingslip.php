@@ -36,7 +36,7 @@
     <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
         <td class="pageHeading"><?php echo nl2br(STORE_NAME_ADDRESS); ?></td>
-        <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . STORE_LOGO, STORE_NAME, '204', '50'); ?></td>
+        <td class="pageHeading" align="right"><?php echo tep_image('../'.DIR_WS_IMAGES . 'store_logo.png', STORE_NAME, '204', '50'); ?></td>
       </tr>
     </table></td>
   </tr>

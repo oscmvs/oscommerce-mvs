@@ -344,7 +344,24 @@
           </tr>
 <?php
     }
-?><?php //MVS start ?>
+    $detail_query = tep_db_query("SELECT transaction_details FROM " . TABLE_ORDERS . " WHERE orders_id = " . (int)$_GET['oID'] . " LIMIT 1");
+    $detail = tep_db_fetch_array($detail_query);
+
+    if ($detail['transaction_details'] != '') {
+      $details = explode(';', $detail['transaction_details']);
+
+      foreach ($details as $d) {
+        $item = explode('|', $d);
+?>
+          <tr>
+            <td class="main"><?php echo $item[0]; ?>:</td>
+            <td class="main"><?php echo $item[1]; ?></td>
+          </tr>
+<?php
+      }
+    }
+?>
+<?php //MVS start ?>
     <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
       </tr>

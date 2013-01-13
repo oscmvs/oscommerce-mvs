@@ -103,7 +103,7 @@
     }
 
     function confirmation() {
-      global $cartID, $cart_PayPal_Standard_ID, $customer_id, $languages_id, $order, $order_total_modules;
+      global $cartID, $cart_PayPal_Standard_ID, $customer_id, $languages_id, $order, $order_total_modules, $shipping;
 
       if (tep_session_is_registered('cartID')) {
         $insert_order = false;
@@ -124,6 +124,7 @@
               tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS . ' where orders_id = "' . (int)$order_id . '"');
               tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . ' where orders_id = "' . (int)$order_id . '"');
               tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_DOWNLOAD . ' where orders_id = "' . (int)$order_id . '"');
+			  tep_db_query('delete from ' . TABLE_ORDERS_SHIPPING . ' where orders_id = "' . (int)$order_id . '"');
             }
 
             $insert_order = true;
@@ -215,6 +216,7 @@
                                     'products_price' => $order->products[$i]['price'],
                                     'final_price' => $order->products[$i]['final_price'],
                                     'products_tax' => $order->products[$i]['tax'],
+									'vendors_id' => $order->products[$i]['vendors_id'],
                                     'products_quantity' => $order->products[$i]['qty']);
 
             tep_db_perform(TABLE_ORDERS_PRODUCTS, $sql_data_array);
@@ -264,6 +266,33 @@
               }
             }
           }
+
+		//MVS 
+		if (($total_weight > 0 ) || (SELECT_VENDOR_SHIPPING == 'true')){
+			$shipping_array = $shipping['vendor'];
+			foreach ($shipping_array as $vendors_id => $shipping_data) {			
+				$vendors_query = tep_db_query("select vendors_name from " . TABLE_VENDORS . " where vendors_id = '" . (int)$vendors_id . "'");
+				$vendors_name = 'Unknown';
+				if ($vendors = tep_db_fetch_array($vendors_query)) {
+					$vendors_name = $vendors['vendors_name'];
+				}
+				
+				$shipping_method_array = explode ('_', $shipping_data['id']);
+				$shipping_method = $shipping_method_array[0];
+				
+				$sql_data_array = array('orders_id' => $insert_id,
+										'vendors_id' => $vendors_id,
+										'shipping_module' => $shipping_method,
+										'shipping_method' => $shipping_data['title'],
+										'shipping_cost' => $shipping_data['cost'],
+										'shipping_tax' =>  $shipping_data['ship_tax'],
+										'vendors_name' => $vendors_name,
+										'vendor_order_sent' => 'no'
+										);
+				tep_db_perform(TABLE_ORDERS_SHIPPING, $sql_data_array);
+			}
+		}
+		//MVS End
 
           $cart_PayPal_Standard_ID = $cartID . '-' . $insert_id;
           tep_session_register('cart_PayPal_Standard_ID');

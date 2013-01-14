@@ -1,13 +1,13 @@
 <?php
-  define('HTTP_SERVER', 'http://www.oscmvs.com');
-  define('HTTP_CATALOG_SERVER', 'http://www.oscmvs.com');
-  define('HTTPS_CATALOG_SERVER', 'http://www.oscmvs.com');
+  define('HTTP_SERVER', 'http://www.please-update.com');
+  define('HTTP_CATALOG_SERVER', 'http://www.please-update.com');
+  define('HTTPS_CATALOG_SERVER', 'http://www.please-update.com');
   define('ENABLE_SSL_CATALOG', 'false');
-  define('DIR_FS_DOCUMENT_ROOT', '/home/ecomme33/public_html/labs/oscmvs-2.3.3-1/');
-  define('DIR_WS_ADMIN', '/labs/oscmvs-2.3.3-1/mvs-admin/');
-  define('DIR_FS_ADMIN', '/home/ecomme33/public_html/labs/oscmvs-2.3.3-1/mvs-admin/');
-  define('DIR_WS_CATALOG', '/labs/oscmvs-2.3.3-1/');
-  define('DIR_FS_CATALOG', '/home/ecomme33/public_html/labs/oscmvs-2.3.3-1/');
+  define('DIR_FS_DOCUMENT_ROOT', 'please-update');
+  define('DIR_WS_ADMIN', 'please-update');
+  define('DIR_FS_ADMIN', 'please-update');
+  define('DIR_WS_CATALOG', 'please-update');
+  define('DIR_FS_CATALOG', 'please-update');
   define('DIR_WS_IMAGES', 'images/');
   define('DIR_WS_ICONS', DIR_WS_IMAGES . 'icons/');
   define('DIR_WS_CATALOG_IMAGES', DIR_WS_CATALOG . 'images/');
@@ -25,10 +25,10 @@
   define('DIR_FS_DOWNLOAD', DIR_FS_CATALOG . 'down-load/');
   define('DIR_FS_DOWNLOAD_PUBLIC', DIR_FS_CATALOG . 'pub/');
 
-  define('DB_SERVER', 'localhost');
-  define('DB_SERVER_USERNAME', 'ecomme33_2331');
-  define('DB_SERVER_PASSWORD', '6oT@,+8e=5TF');
-  define('DB_DATABASE', 'ecomme33_2331');
+  define('DB_SERVER', 'please-update');
+  define('DB_SERVER_USERNAME', 'please-update');
+  define('DB_SERVER_PASSWORD', 'please-update');
+  define('DB_DATABASE', 'please-update');
   define('USE_PCONNECT', 'false');
   define('STORE_SESSIONS', 'mysql');
   define('CFG_TIME_ZONE', 'America/Chicago');

@@ -264,7 +264,7 @@ class fedexwebservices {
 
       $methods = array();
       foreach ($response->RateReplyDetails as $rateReply) {
-        if ((true || in_array($rateReply->ServiceType, $this->types)) && ($method == '' || str_replace('_', '', $rateReply->ServiceType) == $method)) {
+        if (in_array(strtoupper($rateReply->ServiceType), $this->types) && ($method == '' || str_replace('_', '', $rateReply->ServiceType) == $method)){
           $cost = $rateReply->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
           $cost = (float)round(preg_replace('/[^0-9.]/', '',  $cost), 2);
           $methods[] = array('id' => str_replace('_', '', $rateReply->ServiceType),
